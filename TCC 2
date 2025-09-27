@@ -1,44 +1,24 @@
-DROP TABLE IF EXISTS StudentEnrollments;
-
-CREATE TABLE StudentEnrollments ( 
-    course_id VARCHAR(10) NOT NULL,
-    enrollment_date DATE NOT NULL,
-    CONSTRAINT unique_enrollment UNIQUE (student_name, course_id)
+DROP TABLE IF EXISTS employees CASCADE;
+CREATE TABLE employees (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50),
+    department VARCHAR(50),
+    salary NUMERIC
 );
 
-INSERT INTO StudentEnrollments (student_name, course_id, enrollment_date)
-VALUES 
-('Ashish', 'CSE101', '2024-07-01'),
-('Smaran', 'CSE102', '2024-07-01'),
-('Vaibhav', 'CSE101', '2024-07-01');
+INSERT INTO employees (name, department, salary) VALUES
+('Anannya', 'HR', 40000),
+('Yashika', 'Engineering', 60000),
+('Simran', 'Engineering', 55000),
+('Khushi', 'Sales', 30000),
+('Supriya', 'HR', 45000);
 
-BEGIN;
-SELECT * FROM StudentEnrollments
-WHERE student_name = 'Ashish' AND course_id = 'CSE101'
-FOR UPDATE;
+SELECT * FROM employees;
+SELECT name, salary FROM employees WHERE salary > 40000;
+SELECT name FROM employees WHERE department = 'Engineering' AND salary >= 55000;
+SELECT department, AVG(salary) FROM employees GROUP BY department;
+SELECT department, COUNT(*) FROM employees GROUP BY department HAVING COUNT(*) > 1;
+SELECT * FROM employees ORDER BY salary DESC LIMIT 3;
+TRUNCATE TABLE employees;
+DROP TABLE IF EXISTS employees CASCADE;
 
-COMMIT;
-
-UPDATE StudentEnrollments
-SET enrollment_date = '2024-07-01'
-WHERE student_name = 'Ashish' AND course_id = 'CSE101';
-
-BEGIN;
-SELECT * FROM StudentEnrollments
-WHERE student_name = 'Ashish' AND course_id = 'CSE101'
-FOR UPDATE;
-UPDATE StudentEnrollments
-SET enrollment_date = '2024-07-05'
-WHERE student_name = 'Ashish' AND course_id = 'CSE101';
-COMMIT;
-
-BEGIN;
-SELECT * FROM StudentEnrollments
-WHERE student_name = 'Ashish' AND course_id = 'CSE101'
-FOR UPDATE;
-UPDATE StudentEnrollments
-SET enrollment_date = '2024-07-10'
-WHERE student_name = 'Ashish' AND course_id = 'CSE101';
-COMMIT;
-
-SELECT * FROM StudentEnrollments;
